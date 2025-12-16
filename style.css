@@ -1,0 +1,305 @@
+/*
+  Bright, playful Tetris UI.
+  Uses CSS variables so dark mode is a simple body class toggle.
+*/
+
+:root {
+  --bg: #f7f7ff;
+  --panel: rgba(255, 255, 255, 0.85);
+  --text: #141627;
+  --muted: rgba(20, 22, 39, 0.65);
+  --shadow: rgba(11, 13, 27, 0.12);
+  --outline: rgba(11, 13, 27, 0.10);
+
+  --accent1: #ff4d8d;
+  --accent2: #00d2ff;
+  --accent3: #7c4dff;
+
+  --btn: rgba(20, 22, 39, 0.08);
+  --btnText: var(--text);
+  --btnPrimary: linear-gradient(135deg, var(--accent1), var(--accent3));
+  --btnPrimaryText: #ffffff;
+
+  --kbdBg: rgba(20, 22, 39, 0.10);
+
+  --radius: 18px;
+}
+
+body.dark {
+  --bg: #0d1020;
+  --panel: rgba(17, 20, 37, 0.80);
+  --text: #f5f7ff;
+  --muted: rgba(245, 247, 255, 0.65);
+  --shadow: rgba(0, 0, 0, 0.45);
+  --outline: rgba(255, 255, 255, 0.12);
+
+  --btn: rgba(245, 247, 255, 0.10);
+  --btnText: var(--text);
+  --kbdBg: rgba(245, 247, 255, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 700px at 20% 10%, rgba(124, 77, 255, 0.25), transparent 55%),
+    radial-gradient(1200px 700px at 80% 30%, rgba(0, 210, 255, 0.22), transparent 55%),
+    radial-gradient(900px 600px at 50% 95%, rgba(255, 77, 141, 0.18), transparent 60%),
+    var(--bg);
+}
+
+.topbar {
+  max-width: 980px;
+  margin: 18px auto 0;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.logo {
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  font-size: 22px;
+}
+
+.tag {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.toggles {
+  display: flex;
+  gap: 10px;
+}
+
+.chip {
+  border: 1px solid var(--outline);
+  background: var(--panel);
+  color: var(--btnText);
+  padding: 10px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px var(--shadow);
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.chip:active { transform: translateY(1px) scale(0.99); }
+
+.layout {
+  max-width: 980px;
+  margin: 14px auto 18px;
+  padding: 0 14px;
+
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 14px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 45px var(--shadow);
+  overflow: hidden;
+}
+
+.game-panel {
+  padding: 14px;
+}
+
+.canvas-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+#game {
+  width: min(92vw, 380px);
+  height: auto;
+  max-height: 72vh;
+  image-rendering: pixelated;
+  border-radius: 18px;
+  border: 1px solid var(--outline);
+  background: rgba(0, 0, 0, 0.06);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 16px 40px var(--shadow);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  white-space: pre-line;
+  border-radius: 18px;
+  color: var(--text);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 160ms ease;
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(4px);
+}
+
+.overlay.show {
+  opacity: 1;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn {
+  flex: 1;
+  border: 1px solid var(--outline);
+  background: var(--btn);
+  color: var(--btnText);
+  padding: 12px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn.primary {
+  background: var(--btnPrimary);
+  border: none;
+  color: var(--btnPrimaryText);
+}
+
+.mobile-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.side-panel {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.hud {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat {
+  border: 1px solid var(--outline);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.value {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.next {
+  border: 1px solid var(--outline);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.next-title {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+#next {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--outline);
+}
+
+.instructions h2 {
+  margin: 6px 0 8px;
+  font-size: 14px;
+}
+
+.instructions ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+kbd {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 9px;
+  background: var(--kbdBg);
+  border: 1px solid var(--outline);
+  font-weight: 800;
+  color: var(--text);
+}
+
+.footer {
+  max-width: 980px;
+  margin: 0 auto 18px;
+  padding: 0 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Small celebratory animation hooks */
+@keyframes pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+body.pop .panel {
+  animation: pop 220ms ease;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .side-panel {
+    order: 2;
+  }
+}
